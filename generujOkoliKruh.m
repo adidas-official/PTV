@@ -1,23 +1,22 @@
-function maticeOkoli = generujOkoliKruh(x1, x2, ns, x1Limits, x2Limits)
-    % Počet bodů v kruhu [matice numPoints x numPoints]
-    numPoints = 3; % Nastavení počtu bodů (čím více, tím jemnější rozložení)
+function maticeOkoli = generujOkoliKruh(x1, x2, ns, x1Limits, x2Limits, potentialSolution)
+    % Funkce generuje rovnoměrně rozmístěné body uvnitř kruhu definovaného středem a poloměrem
     
-    % Úhly pro body na kruhu (od 0 do 2*pi)
-    angles = linspace(0, 2*pi, numPoints + 1);
-    angles = angles(1:end-1); % Poslední úhel je totožný s prvním, odstraníme ho
+    numPoints = potentialSolution;
+    % Generování bodů v polárních souřadnicích
+    r = randn(1, numPoints) * (ns / 2); % Poloměr s normálním rozdělením
+    r = abs(r); % Ujistíme se, že vzdálenost je kladná
+    r(r > ns) = ns; % Oříznutí na maximální poloměr
     
-    % Generování souřadnic bodů na kruhu
-    nh1 = x1 + ns * cos(angles); % x-souřadnice
-    nh2 = x2 + ns * sin(angles); % y-souřadnice
+    theta = rand(1, numPoints) * 2 * pi; % Náhodný úhel v rozsahu 0 až 2*pi
     
-    % Ujištění, že body zůstávají v rámci omezení
+    % Převod na kartézské souřadnice
+    nh1 = x1 + r .* cos(theta);
+    nh2 = x2 + r .* sin(theta);
+    
+    % Omezení bodů na limity
     nh1 = min(max(nh1, x1Limits(1)), x1Limits(2));
     nh2 = min(max(nh2, x2Limits(1)), x2Limits(2));
-
-    % Vytvoření mřížky pomocí meshgrid
-    [X1, X2] = meshgrid(nh1, nh2);
     
-    % Kombinace souřadnic do 2xN matice (každý sloupec je bod)
-    maticeOkoli = [X1(:)'; X2(:)'];
-    
+    % Kombinace souřadnic do matice 2xN
+    maticeOkoli = [nh1; nh2];
 end
