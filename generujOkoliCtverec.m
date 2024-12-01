@@ -13,6 +13,6 @@ function maticeOkoli = generujOkoliCtverec(x1, x2, ns, x1Limits, x2Limits, poten
     % Vytvoření mřížky pomocí meshgrid
     [X1, X2] = meshgrid(nh1, nh2);
     
-    % Kombinace souřadnic do 2xN matice (každý sloupec je bod)
+    % Kombinace souřadnic do matice NxN - potentialSolution^2 bodů
     maticeOkoli = [X1(:)'; X2(:)'];
 end
